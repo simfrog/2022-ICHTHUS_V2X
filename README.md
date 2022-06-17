@@ -1,1 +1,1 @@
-# 2022-ICHTHUS_V2X
+# ichthus_v2x
