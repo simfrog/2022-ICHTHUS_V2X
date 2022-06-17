@@ -12,4 +12,5 @@ V2X ROS2 node of Soongsil University, Ichthus
  
 ## ROS API
 #### Subs
-* > /fix
+* ```/fix``` ([sensor_msgs/msg/NavSatFix](http://docs.ros.org/en/lunar/api/sensor_msgs/html/msg/NavSatFix.html))
+* ```/v2x''' ([std_msgs::msg::Float64MultiArray](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Float64MultiArray.html))
