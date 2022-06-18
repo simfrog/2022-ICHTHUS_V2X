@@ -22,7 +22,9 @@ V2X ROS2 node of Soongsil University, Ichthus
 * ```/fix``` ([sensor_msgs/msg/NavSatFix](http://docs.ros.org/en/lunar/api/sensor_msgs/html/msg/NavSatFix.html))  
   Information of gnss - longitude, latitude, elevation
 * ```/v2x``` ([std_msgs/msg/Float64MultiArray](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Float64MultiArray.html))  
-  Information of Can data - speed, transmission  
+  Information of Can data - speed, transmission
+* ```/gnss_pose``` ([geometry_msgs/msg/PoseStamped](http://docs.ros.org/en/lunar/api/geometry_msgs/html/msg/PoseStamped.html))  
+  Information of gnss orientation - heading  
 
 #### Pubs
 * ```/v2x_info``` ([kiapi_msgs/msg/V2xinfo](https://github.com/simfrog/2022-kiapi_msgs/blob/main/msg/V2xinfo.msg))  
