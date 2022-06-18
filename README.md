@@ -11,8 +11,6 @@ V2X ROS2 node of Soongsil University, Ichthus
  Subscribe other ros node topic, fill the correct PVD message and send PVD message through WAVE socket communication  
 
 ## Requirements
- 
-## Requirements
  1. Information of gnss
  2. Information of Can data
  3. OBU(CEST)
@@ -27,9 +25,9 @@ V2X ROS2 node of Soongsil University, Ichthus
   Information of Can data - speed, transmission  
 
 #### Pubs
-* ```/v2x_info``` ([kiapi_msgs/msg/V2xinfo]())  
+* ```/v2x_info``` ([kiapi_msgs/msg/V2xinfo](https://github.com/simfrog/2022-kiapi_msgs/blob/main/msg/V2xinfo.msg))  
   Information of SPaT messages  
-* ```/pvd_info``` ([kiapi_msgs/msg/Pvdinfo]())  
+* ```/pvd_info``` ([kiapi_msgs/msg/Pvdinfo](https://github.com/simfrog/2022-kiapi_msgs/blob/main/msg/Pvdinfo.msg))  
   Information of PVD messages -  *DEBUG*
 
 ## Using ASN.1 Compiler to Use J2735
@@ -46,4 +44,15 @@ V2X ROS2 node of Soongsil University, Ichthus
    * ./configure
    * make install
    * asn1c -v  
-![asn1c build](https://user-images.githubusercontent.com/31130917/174312820-2e08fbed-9de5-4a1a-9e4f-58cc92b611b6.png)
+![asn1c build](https://user-images.githubusercontent.com/31130917/174312820-2e08fbed-9de5-4a1a-9e4f-58cc92b611b6.png)  
+ 3. Compile ASN.1  
+ * Copy ASN file within a asn folder
+ * Execute compile commands within a j2735 folder
+   * cd j2735
+   * asn1c -f compound-names -pdu=all ../asn/[.ASN file]
+   * make -f converter-example.mk
+ * Check the creation of libasncodec.a within a j2735 folder  
+![asn 1 compile](https://user-images.githubusercontent.com/31130917/174422636-c1b9bc90-a9aa-4896-9ec5-24baf529dd12.png)  
+
+## How to launch
+```ros2 launch ichthus_v2x ichthus_v2x.launch.py```
