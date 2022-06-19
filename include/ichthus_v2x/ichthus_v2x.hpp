@@ -33,7 +33,7 @@
 #define OBU_RECEIVE_BUFFER_SIZE 2048 //받는 buffer의 전체 크기
 #define MAX_UPER_SIZE 1400 //buffer 중 UPER(Payload) 크기
 
-#define PVD_INTERVAL 200 //msec(5hz)
+#define PVD_INTERVAL 1000 //msec(5hz)
 
 /* =============CHANGE IP & PORT============== */
 // #define IP "118.45.183.36" // OBU = "192.168.10.10" 테스트서버 - "118.45.183.36", 레코딩서버 - "127.0.0.1"
@@ -88,10 +88,10 @@ public:
   explicit IchthusV2X();
   virtual ~IchthusV2X();
 
-  void ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msg); /* DEBUG */
+  // void ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msg); /* DEBUG */
   // void LocationCallback(const kiapi_msgs::msg::Mylocation::SharedPtr msg); /* DEBUG */
   void GnssCallback(const sensor_msgs::msg::NavSatFix::SharedPtr msg);
-  // void GnssPoseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
+  void GnssPoseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
   void VelocityCallback(const std_msgs::msg::Float64MultiArray::SharedPtr msg);
 
   void sendPvd();
@@ -118,7 +118,7 @@ public:
 
 private:
   // rclcpp::Publisher<kiapi_msgs::msg::Pvdinfo>::SharedPtr pvd_pub_;       /* DEBUG */
-  rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr ori_sub_;       /* DEBUG */
+  // rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr ori_sub_;       /* DEBUG */
   // rclcpp::Subscription<kiapi_msgs::msg::Mylocation>::SharedPtr loc_sub_; /* DEBUG */
   rclcpp::Publisher<kiapi_msgs::msg::V2xinfo>::SharedPtr v2x_pub_;
   rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr loc_sub_;

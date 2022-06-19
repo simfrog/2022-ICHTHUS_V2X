@@ -16,16 +16,16 @@ IchthusV2X::IchthusV2X() : Node("ichthus_v2x")
   loc_sub_ = this->create_subscription<sensor_msgs::msg::NavSatFix>("/fix", 
               rclcpp::SensorDataQoS().keep_last(64),
               std::bind(&IchthusV2X::GnssCallback, this, std::placeholders::_1));
-  // gnss_pose_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>("/gnss_pose", 
-  //             rclcpp::SensorDataQoS().keep_last(64),
-  //             std::bind(&IchthusV2X::GnssPoseCallback, this, std::placeholders::_1));
+  gnss_pose_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>("/gnss_pose", 
+              rclcpp::SensorDataQoS().keep_last(64),
+              std::bind(&IchthusV2X::GnssPoseCallback, this, std::placeholders::_1));
   vel_sub_ = this->create_subscription<std_msgs::msg::Float64MultiArray>("/v2x", qos_profile,
               std::bind(&IchthusV2X::VelocityCallback, this, std::placeholders::_1));
   // pvd_pub_ = this->create_publisher<kiapi_msgs::msg::Pvdinfo>("pvd_info", qos_profile); /* DEBUG */
   // loc_sub_ = this->create_subscription<kiapi_msgs::msg::Mylocation>("gnss_info", qos_profile,
   //             std::bind(&IchthusV2X::LocationCallback, this, std::placeholders::_1));   /* DEBUG */
-  ori_sub_ = this->create_subscription<sensor_msgs::msg::Imu>("/imu/data", qos_profile, /* DEBUG */
-              std::bind(&IchthusV2X::ImuCallback, this, std::placeholders::_1));
+  // ori_sub_ = this->create_subscription<sensor_msgs::msg::Imu>("/imu/data", qos_profile, /* DEBUG */
+  //             std::bind(&IchthusV2X::ImuCallback, this, std::placeholders::_1));
 
   IP = this->declare_parameter("ip", "192.168.10.10");
   std::cout << "IP : " << IP << std::endl; /* DEBUG */
@@ -53,7 +53,7 @@ void IchthusV2X::LocationCallback(const kiapi_msgs::msg::Mylocation::SharedPtr m
 }
 */
 
-
+/*
 void IchthusV2X::ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
   // std::cout << "callback" << std::endl;
@@ -61,14 +61,14 @@ void IchthusV2X::ImuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
   double cosy_cosp = 1 - 2 * (msg->orientation.y * msg->orientation.y + msg->orientation.z * msg->orientation.z);
   Vli_.heading = std::atan2(siny_cosp, cosy_cosp);
 }
-
+*/
 
 void IchthusV2X::GnssCallback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)
 {
   // std::cout << "callback" << std::endl; /* DEBUG */
-  Vli_.latitude = msg->latitude*0.1;
-  Vli_.longitude = msg->longitude*0.1;
-  Vli_.elevation = msg->altitude*0.1;
+  Vli_.latitude = msg->latitude*10000000;
+  Vli_.longitude = msg->longitude*10000000;
+  Vli_.elevation = msg->altitude*10;
 
   if(is_first_topic)
   {
@@ -78,20 +78,20 @@ void IchthusV2X::GnssCallback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)
 }
 
 
-// void IchthusV2X::GnssPoseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
-// {
-//   // std::cout << "callback" << std::endl; /* DEBUG */
-//   double siny_cosp = 2.0 * (msg->pose.orientation.w * msg->pose.orientation.z + msg->pose.orientation.x * msg->pose.orientation.y);
-//   double cosy_cosp = 1.0 - 2.0 * (msg->pose.orientation.y * msg->pose.orientation.y + msg->pose.orientation.z * msg->pose.orientation.z);
-//   Vli_.heading = static_cast<double>(static_cast<int>((-(std::atan2(siny_cosp, cosy_cosp) * (180.0 / M_PI)) + 450.0)) % 360)*0.0125;
-// }
+void IchthusV2X::GnssPoseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
+{
+  // std::cout << "callback" << std::endl; /* DEBUG */
+  double siny_cosp = 2.0 * (msg->pose.orientation.w * msg->pose.orientation.z + msg->pose.orientation.x * msg->pose.orientation.y);
+  double cosy_cosp = 1.0 - 2.0 * (msg->pose.orientation.y * msg->pose.orientation.y + msg->pose.orientation.z * msg->pose.orientation.z);
+  Vli_.heading = static_cast<double>(static_cast<int>((-(std::atan2(siny_cosp, cosy_cosp) * (180.0 / M_PI)) + 450.0)) % 360)*80;
+}
 
 
 void IchthusV2X::VelocityCallback(const std_msgs::msg::Float64MultiArray::SharedPtr msg)
 {
   // std::cout << "velcallback1 : " << msg->data[0] << std::endl; /* DEBUG */
   // std::cout << "velcallback2 : " << msg->data[1] << std::endl; /* DEBUG */
-  Vli_.speed = msg->data[0]*0.02;
+  Vli_.speed = msg->data[0]*50;
   if (msg->data[1] == 0)
   {
     Vli_.transmisson = 1;
